@@ -12,6 +12,10 @@ class Login{
 	}//__construct
 
 	public function validateLogin($user, $password){
+		//escape
+		$user=htmlspecialchars($user);
+		$pass=htmlspecialchars($password);
+		
 		//session started?
 		if(isset($_SESSION['user']) && isset($_SESSION['password'])){				
 			$user=$_SESSION['user'] ;
@@ -26,6 +30,7 @@ class Login{
 	}//validateLogin
 
 	public function logout($logoutVar){
+		$logoutVar=htmlspecialchars($logoutVar);
 		if (isset($logoutVar) && $logoutVar){
 			session_destroy();
 			$this->login=false;
