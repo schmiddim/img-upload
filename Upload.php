@@ -1,4 +1,11 @@
 <?php
+/**
+ * 
+ * @todo: wasn wenn unterschiedliche bilder gleichen namen haben?
+ * Enter description here ...
+ * @author ms
+ *
+ */
 class Upload{
 	/**Attributes**/
 
@@ -6,25 +13,9 @@ class Upload{
 
 	private $lastimage=null;
 
-	private $ilegal=array(
-		'#'
-		,'$'
-		,'%'
-		,'^'
-		,'&'
-		,'*'
-		,'?'
-		);
-
-		private $legal=array(
-		'no'
-		,'dollar'
-		,'percent'
-		,'tilde'
-		,'and'
-		,''
-		,''
-		);
+	private $ilegal=array('#','$','%','^','&','*','?');
+	private $legal=array('no','dollar'	,'percent'	,'tilde','and','','');
+	
 		/**__construct()**/
 
 		public function __construct(){
@@ -79,18 +70,34 @@ class Upload{
 				echo "<img src=\"{$this->lastimage}\"/ id=\"lastimage\"><p>";
 			}
 		}
+		
+		 private static function sortByImagesize($a,$b){
+			
+			$imgA=getimagesize($a);
+			$imgB=getimagesize($b);
+			
+			$sumA=$imgA[0]* $imgA[1];
+			$sumB=$imgB[0]* $imgB[1];	
+			
+			if ($sumA == $sumB)
+				return 0;
+			return ($sumA <$sumB) ? -1 :1;
+			
+			
+			
+		}
 		public function listImages(){
 			$files=array();
 			$handle=opendir($this->uploaddir());
 			while (false !== ($file=readdir($handle))){
 				if ($file !='.' && $file !='..')
-				$files[]=$file;
+				$files[]=$this->uploaddir().$file;
 					
 			}
-
+			usort($files,array("Upload" ,"sortByImagesize"));
 			foreach($files as $file){
-				$full=$this->uploaddir().$file;
-				echo "<img src=\"$full\"/>\n";
+				#$full=$this->uploaddir().$file;
+				echo "<img src=\"$file\"/>\n";				
 			}
 		}
 
