@@ -71,7 +71,7 @@ if ($login->loggedIn())
 
 			?>
 			<?php $u->showlastImage();
-			$u->listImages(); ?>
+			$u->showImages(); ?>
 	</section>
 
 </html>
