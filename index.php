@@ -6,16 +6,24 @@ $login= new Login();
 
 $login->validateLogin(@$_POST['user'], @$_POST['pass']);
 $login->logout(@$_GET['logout']);
-$u=new Upload();
+$u=new Upload($login);
 $u->uploaddir('img');
 if ($login->loggedIn())
 	$u->upload();
+	
+	
+if (isset($_GET['delete'])){
+	echo "<h1>delete</h1>";
+	$u->delete(@$_GET['delete']);
+}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" media="all" href="layout.css">
+<script type="text/javascript" src="libs/zeroclipboard/ZeroClipboard.js"></script>
+<script>ZeroClipboard.setMoviePath( 'libs/zeroclipboard/ZeroClipboard10.swf' );</script>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
 <title>File Upload</title>
@@ -73,5 +81,7 @@ if ($login->loggedIn())
 			<?php $u->showlastImage();
 			$u->showImages(); ?>
 	</section>
+	                 
 
+</body>
 </html>

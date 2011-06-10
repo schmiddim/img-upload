@@ -1,14 +1,14 @@
 <?php
 /**
- * @todo datei bereits vorhanden?
- * @todo: wasn wenn unterschiedliche bilder gleichen namen haben?
- * Enter description here ...
+ * upload file
  * @author ms
- *
+ * @todo: löschen
+ *@todo icons
+ U+2716 (10006)	✖
  */
 class Upload{
 	/**Attributes**/
-
+	private $login=null;
 	private $uploaddir;
 
 	private $lastimage=null;
@@ -18,12 +18,16 @@ class Upload{
 
 	/**__construct()**/
 
-	public function __construct(){
-
+	public function __construct(Login $log=null){
+		$this->login=$log;
 	}//__construct
 	public function upload(){
 		$this->uploadfromPC();
 		$this->uploadFromUrl();
+	}
+	public function delete($file){
+		 return @unlink($file);
+		
 	}
 	private function uploadfromPC(){
 		if (@$_FILES['file']['name']){
@@ -36,8 +40,8 @@ class Upload{
 	}
 
 	private function uploadFromUrl(){
-
-		if(@$_POST['link'] && $this->fileExists(@$_POST['link'])){
+		$validUrl=@$_POST['link'];
+		if(@$_POST['link'] && $this->fileExists(@$_POST['link'])&& $validUrl){
 			$handle=fopen($_POST['link'], 'r');
 
 			$safe=str_replace($this->ilegal, $this->legal, $_POST['link']);
@@ -48,7 +52,7 @@ class Upload{
 		}
 	}
 	/**
-	 * 
+	 *
 	 * Copy uploadet file to the image folder
 	 * @param PathToImage $source
 	 * @param PathToImage $dest
@@ -76,7 +80,7 @@ class Upload{
 		if($filenameInuse && !$exists){
 			$pathinfo=pathinfo(basename($dest));
 			$dest=$this->uploaddir. $shaSource .'.'.  $pathinfo['extension'];
-				
+
 		}
 		//file isn't on the machine
 		if (!$exists){
@@ -104,12 +108,15 @@ class Upload{
 
 	public function showlastImage(){
 		if ($this->lastimage){
-				
+
 			echo "<h1>last image</h1>";
 			echo "<img src=\"{$this->lastimage}\"/ id=\"lastimage\"><p>";
 		}
 	}
 
+	private static function sortByDate($a, $b){
+
+	}
 	private static function sortByImagesize($a,$b){
 			
 		$imgA=getimagesize($a);
@@ -131,16 +138,31 @@ class Upload{
 		while (false !== ($file=readdir($handle))){
 			if ($file !='.' && $file !='..')
 			$files[]=$this->uploaddir().$file;
-				
+
 		}
 		return $files;
 	}
 	public function showImages(){
 		$files=$this->listImages();
 		usort($files,array("Upload" ,"sortByImagesize"));
+		$ctr=0;
 		foreach($files as $file){
 			#$full=$this->uploaddir().$file;
-			echo "<img src=\"$file\"/>\n";
+			$basename=basename($file);
+			$imageurl='http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF'])."/$file";
+			$delete='';
+			
+			$linkToImage="\n<div class=\"linktoimage\"><a href=\"$file\">&#10546;</a></div>\n";
+			if($this->login!=null &&$this->login->loggedIn()){
+				$delete="\n<div><a href=\"index.php?delete=$file\">&#10006;</a></div>\n";
+			}
+			$copy="";
+			$copy.="\n<div class=\"d_clip_button\" id=\"img$ctr\">&#9112;</div>\n";
+			$copy.="<script>var d$ctr= new ZeroClipboard.Client();d$ctr.setText('$imageurl');d$ctr.setHandCursor(true);d$ctr.glue('img$ctr');</script>";
+			
+			
+			echo "<div class=\"image\"><img alt=\"$file\" src=\"$file\"/><div class=\"image_wrapper\">$linkToImage  $copy $delete</div></div>\n";
+			$ctr++;
 		}
 	}
 
@@ -152,6 +174,9 @@ class Upload{
 			$uploaddir.='/';
 			$this->uploaddir=$uploaddir;
 		}
+	}
+	private function isValidURL($url){
+		return preg_match('|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i', $url);
 	}
 
 }//class

@@ -1,10 +1,79 @@
 @CHARSET "UTF-8";
 
+/************************************paste lib**/
+/*#d_clip_button {
+	color:blue;
+	float:left;
+	padding:0em 0.1em 0em 0.1em;
+}
+
+#d_clip_button.hover {
+	
+	font-size:2.1em;
+}*/
+.d_clip_button {
+	color:blue;
+	float:left;
+	padding:0em 0.1em 0em 0.1em;
+}
+
+.d_clip_button.hover {
+	
+	font-size:2.1em;
+}
+
+
+/***********************************paste lib**/
+.__image {
+	color: black;
+	font-size: 1.8em;
+	line-height: 0;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+
+.image {
+	background-color: #9cbc2c;
+	float: left;
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
+	border-radius: 5px;
+}
+
+.image a {
+	text-decoration: none;
+	text-color: blue;
+	/*font-size:2em;*/
+}
+
+.image a:hover {
+	font-size: 2.1em;
+}
+
+.deleteimage {
+	position: relative;
+	padding-bottom: 1em;
+	float: right;
+	clear: both;
+	line-height: 0;
+}
+
+.linktoimage {
+	float: left;
+	/* 	float:right; */
+}
+
+.image_wrapper {
+	padding: 0em 0em 0em 0.4em;
+}
+
 body {
 	background: black;
 	color: white;
 	font-family: Georgia, "Times New Roman", Times, serif;
 	padding: 20px;
+	float: left;
+	clear: both;
 }
 
 html,body,h1,form,fieldset,legend,ol,li {
@@ -19,8 +88,8 @@ form {
 	border-radius: 5px;
 	padding: 10px;
 	width: 400px;
-	opacity:.9;
-	margin:20px;
+	opacity: .9;
+	margin: 20px;
 }
 
 form fieldset {
@@ -39,8 +108,6 @@ form legend {
 	padding-bottom: 6px;
 	text-shadow: 0 1px 1px #c0d576;
 }
-
-
 
 form ol li {
 	background: #b9cf6a;
@@ -78,7 +145,6 @@ form button {
 	margin: auto;
 	padding: 7px 7px;
 	text-shadow: 0 1px 1px #000000;
-	
 }
 
 form button:hover {
